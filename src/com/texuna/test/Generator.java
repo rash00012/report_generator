@@ -2,82 +2,165 @@ package com.texuna.test;
 
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+
+/**
+ * Генератор текстовых отчетов
+ * принимает 3 аргумента:
+ * 1 аргумент - файл настроек исходных данных (.xml);
+ * 2 аргумент - файл, содержащий исходные данные, разделенные табуляцией в кодировке UTF-16 (.tsv);
+ * 3 аргумент - файл для вывода отчета (.txt)
+ */
 public class Generator {
 
-    public static int pageHeight;
-    public static int pageWidth;
-    public static ArrayList<String> columnTitles = new ArrayList<>();
-    public static ArrayList<Integer> columnWidths = new ArrayList<>();
-    public static String pageSeparator = "~";
-    public static String columnSeparator = "|";
-    public static String lineSeparator = "-";
-    public static int lineCounter = 0;
+    static int pageHeight;
+    static int pageWidth;
+    static ArrayList<String> columnTitles = new ArrayList<>();
+    static ArrayList<Integer> columnWidths = new ArrayList<>();
+    static String pageSeparator = "~";
+    static String columnSeparator = "|";
+    static String lineSeparator = "-";
+    static int lineCounter = 0;
 
-    public static String writeReportLines(String[] srcStringParts) {
-        String reportLine="";
-        if (lineCounter==0){
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < pageWidth; i++) {
-                sb.append(lineSeparator);
-            }
-            reportLine += sb.toString()+"\r\n";
+    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
+        String settingsFileName = args[0];
+        String srcDataFileName = args[1];
+        String reportFileName = args[2];
+
+        // получаем параметры страницы
+        File settingsFile = new File(settingsFileName);
+        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document document = documentBuilder.parse(settingsFile);
+        Element rootEl = document.getDocumentElement();
+        Element pageElement = (Element) rootEl.getElementsByTagName("page").item(0);
+        pageWidth = Integer.parseInt(pageElement.getElementsByTagName("width").item(0).getTextContent());
+        pageHeight = Integer.parseInt(pageElement.getElementsByTagName("height").item(0).getTextContent());
+
+        //получаем параметры колонок
+        Element columnsEl = (Element) rootEl.getElementsByTagName("columns").item(0);
+        NodeList columnTitleNodes = columnsEl.getElementsByTagName("title");
+        for (int i = 0; i < columnTitleNodes.getLength(); i++) {
+            columnTitles.add(i, columnTitleNodes.item(i).getTextContent());
+        }
+        NodeList columnWidthNodes = columnsEl.getElementsByTagName("width");
+        for (int i = 0; i < columnTitleNodes.getLength(); i++) {
+            columnWidths.add(i, Integer.parseInt(columnWidthNodes.item(i).getTextContent()));
         }
 
-        ArrayList[] cellParts = new ArrayList[srcStringParts.length];
-        int cellsHeight = 0;
 
-        for (int i = 0; i < srcStringParts.length; i++) {
-            cellParts[i] = splitString(srcStringParts[i], columnWidths.get(i));
-            if (cellsHeight <= cellParts[i].size()) {
-                cellsHeight = cellParts[i].size();
-            }
+        // получаем строки из исходного файла и печатаем отчет
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(reportFileName), "UTF-16"));
+        BufferedReader br = new BufferedReader(new InputStreamReader(
+                new FileInputStream(srcDataFileName), "UTF-16"));
+
+        String srcLine;
+        while ((srcLine = br.readLine()) != null) {
+            String[] srcLineArr = srcLine.split("\\t");
+            ArrayList<String> srcLineList = new ArrayList<>(Arrays.asList(srcLineArr));
+            bw.write(getReport(srcLineList));
         }
 
-        String whitespaces;
-
-        for (int i = 0; i < cellsHeight; i++) {
-            reportLine = columnSeparator;
-            for (int j = 0; j < cellParts.length; j++) {
-                reportLine += " ";
-                if (cellParts[j].size() > i) {
-                    String cellPart = cellParts[j].get(i).toString();
-                    whitespaces = getWhitespacesString(columnWidths.get(j) - cellPart.length());
-
-                    reportLine += cellPart + whitespaces;
-                } else {
-                    reportLine += getWhitespacesString(columnWidths.get(j));
-                }
-                reportLine += " " + columnSeparator;
-            }
-            reportLine+="\r\n";
-            lineCounter++;
-        }
-        System.out.print(reportLine);
-        return reportLine;
+        br.close();
+        bw.close();
     }
 
-    static String getWhitespacesString(int whitespacesCount) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < whitespacesCount; i++) {
-            sb.append(" ");
+
+    /**
+     * метод получает список данных из одной строки исходного файла и возвращает отчет для вывода
+     * с заголовком и разделителями
+     *
+     * @param srcStringParts - список данных из одной строки исходного файла
+     * @return String - текст отчета
+     */
+    static String getReport(ArrayList<String> srcStringParts) {
+        String report = "";
+        int reportLineHeight = 0;
+
+        // если это первая строка на странице, то добавляем в начало отчета заголовок рекурсивным вызовом этого метода
+        if (lineCounter == 0 && !srcStringParts.get(0).equals(columnTitles.get(0))) {
+            report += getReport(columnTitles);
         }
-        return sb.toString();
+
+        // содержимое каждой ячейки разбиваем на список строк, создаем список ячеек из списков строк каждой ячейки
+        ArrayList<ArrayList<String>> cellLinesList = new ArrayList<>();
+
+        for (int i = 0; i < srcStringParts.size(); i++) {
+            cellLinesList.add(splitString(srcStringParts.get(i), columnWidths.get(i)));
+            if (reportLineHeight <= cellLinesList.get(i).size()) {
+                // получаем высоту строки отчета по высоте самой большой ячейки в строке
+                reportLineHeight = cellLinesList.get(i).size();
+            }
+        }
+
+        // если отчет не уместится на странице после добавления текущих данных, то переносим данные на новую страницу
+        if (lineCounter + reportLineHeight >= pageHeight) {
+            report += pageSeparator + "\r\n";
+            lineCounter = 0;
+            // на новой странице добавляем заголовок
+            report += getReport(columnTitles);
+        }
+
+        //если это не первая строка данных на странице, то печатаем разделитель строк данных перед данными
+        if (lineCounter != 0) {
+            String lineSeparatorString = getCompletedString("",pageWidth,lineSeparator);
+            report = report.concat(lineSeparatorString).concat("\r\n");
+            lineCounter++;
+        }
+
+        // составляем строку данных
+        for (int i = 0; i < reportLineHeight; i++) {
+            report = report.concat(columnSeparator);
+            // в первую строку добавляем первые элементы из каждого списка строк ячеек и тд
+            for (int j = 0; j < cellLinesList.size(); j++) {
+                report = report.concat(" ");
+                // печатаем данные в строку ячейки, оставшееся место заполняем пробелами
+                if (cellLinesList.get(j).size() > i) {
+                    String cellLine = getCompletedString(cellLinesList.get(j).get(i), columnWidths.get(j)," ");
+                    report = report.concat(cellLine);
+                } else {// если для текущей строки ячейки нет данных, заполняем пробелами всю строку ячейки
+                    report = report.concat(getCompletedString("", columnWidths.get(j)," "));
+                }
+                report = report.concat(" ").concat(columnSeparator);
+            }
+            report = report.concat("\r\n");
+            lineCounter++;
+        }
+        return report;
     }
 
     /**
-     * метод получает значение ячейки в виде строки, разбивает по длине и возвращает ArrayList
+     * дополняет строку нужным символом до необходимой длины
+     *
+     * @param srcString - исходная строка
+     * @param stringLength - необходимая длина строки
+     * @param symbol - символ для дополнения строки
+     * @return String - дополненная строка
+     */
+    static String getCompletedString(String srcString, int stringLength, String symbol) {
+        String result = srcString;
+
+        for (int i = 0; i < stringLength - srcString.length(); i++) {
+            result = result.concat(symbol);
+        }
+        return result;
+    }
+
+    /**
+     * метод получает строку, разбивает по длине и возвращает список строк
      *
      * @param srcString    - исходная строка
      * @param stringLength - максимальная длина строк в возвращаемом массиве
-     * @return ArrayList
+     * @return ArrayList - список разбитых строк
      */
-    public static ArrayList<String> splitString(String srcString, int stringLength) {
+    static ArrayList<String> splitString(String srcString, int stringLength) {
         ArrayList<String> result = new ArrayList<>();
         String remainingString = srcString;
         int separatorIndex = 0;
@@ -118,44 +201,5 @@ public class Generator {
         }
 
         return result;
-    }
-
-    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
-        String settingsFileName = args[0];
-        String srcDataFileName = args[1];
-        String reportFileName = args[2];
-
-        // getting page settings
-        File settingsFile = new File(settingsFileName);
-        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document document = documentBuilder.parse(settingsFile);
-        Element rootEl = document.getDocumentElement();
-        Element pageElement = (Element) rootEl.getElementsByTagName("page").item(0);
-        pageWidth = Integer.parseInt(pageElement.getElementsByTagName("width").item(0).getTextContent());
-        pageHeight = Integer.parseInt(pageElement.getElementsByTagName("height").item(0).getTextContent());
-
-        //getting column settings
-        Element columnsEl = (Element) rootEl.getElementsByTagName("columns").item(0);
-        NodeList columnTitleNodes = columnsEl.getElementsByTagName("title");
-        for (int i = 0; i < columnTitleNodes.getLength(); i++) {
-            columnTitles.add(i, columnTitleNodes.item(i).getTextContent());
-        }
-        NodeList columnWidthNodes = columnsEl.getElementsByTagName("width");
-        for (int i = 0; i < columnTitleNodes.getLength(); i++) {
-            columnWidths.add(i, Integer.parseInt(columnWidthNodes.item(i).getTextContent()));
-        }
-
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(reportFileName), "UTF-16"));
-//        String header
-//        String pageHeader = columnSeparator+" "+columnTitles.get(0)+;
-//        bw.write(columnSeparator);
-        bw.close();
-
-        String[] arr = new String[3];
-        arr[0] = "1";
-        arr[1] = "29/11/2009";
-        arr[2] = "Юлианна-Оксана Сухово-Кобылина";
-        writeReportLines(arr);
     }
 }
