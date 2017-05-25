@@ -18,7 +18,7 @@ import java.util.Arrays;
  * 2 аргумент - файл, содержащий исходные данные, разделенные табуляцией в кодировке UTF-16 (.tsv);
  * 3 аргумент - файл для вывода отчета (.txt)
  */
-public class Generator {
+public class ReportGenerator {
 
     static int pageHeight;
     static int pageWidth;
@@ -30,7 +30,7 @@ public class Generator {
     static int lineCounter = 0;
     static int currentReportLineHeight = 0;
 
-    
+
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
         String settingsFileName = args[0];
         String srcDataFileName = args[1];
@@ -101,8 +101,8 @@ public class Generator {
 
             //если это не первая строка данных на странице, то печатаем разделитель строк данных перед данными
             if (lineCounter != 0) {
-                String lineSeparatorString = getCompletedString("", pageWidth, lineSeparator);
-                bw.write(lineSeparatorString.concat("\r\n"));
+                String lineSeparatorString = getCompletedString("", pageWidth, lineSeparator).concat("\r\n");
+                bw.write(lineSeparatorString);
                 lineCounter++;
             }
 
@@ -119,7 +119,7 @@ public class Generator {
      * @return String - строка отчета
      */
     static String getReportLine(ArrayList<String> srcStringData) {
-        String report = "";
+        String reportLine = "";
         currentReportLineHeight = 0;
 
         // содержимое каждой ячейки разбиваем на список строк, создаем список ячеек из списков строк каждой ячейки
@@ -135,23 +135,23 @@ public class Generator {
 
         // составляем строку данных
         for (int i = 0; i < currentReportLineHeight; i++) {
-            report = report.concat(columnSeparator);
+            reportLine = reportLine.concat(columnSeparator);
             // в первую строку добавляем первые элементы из каждого списка строк ячеек и тд
             for (int j = 0; j < cellLinesList.size(); j++) {
-                report = report.concat(" ");
+                reportLine = reportLine.concat(" ");
                 // пишем данные в строку ячейки, оставшееся место заполняем пробелами
                 if (cellLinesList.get(j).size() > i) {
                     String cellLine = getCompletedString(cellLinesList.get(j).get(i), columnWidths.get(j), " ");
-                    report = report.concat(cellLine);
+                    reportLine = reportLine.concat(cellLine);
                 } else {// если для текущей строки ячейки нет данных, заполняем пробелами всю строку ячейки
-                    report = report.concat(getCompletedString("", columnWidths.get(j), " "));
+                    reportLine = reportLine.concat(getCompletedString("", columnWidths.get(j), " "));
                 }
-                report = report.concat(" ").concat(columnSeparator);
+                reportLine = reportLine.concat(" ").concat(columnSeparator);
             }
-            report = report.concat("\r\n");
+            reportLine = reportLine.concat("\r\n");
 
         }
-        return report;
+        return reportLine;
     }
 
     /**
@@ -175,7 +175,7 @@ public class Generator {
      * метод получает строку, разбивает по длине и возвращает список строк
      *
      * @param srcString    - исходная строка
-     * @param stringLength - максимальная длина строк в возвращаемом массиве
+     * @param stringLength - максимальная длина строк в возвращаемом списке
      * @return ArrayList - список разбитых строк
      */
     static ArrayList<String> splitString(String srcString, int stringLength) {

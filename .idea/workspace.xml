@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="59d9cea3-3ba2-4990-ae1e-0da13863269b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/texuna/test/Generator.class" afterPath="$PROJECT_DIR$/bin/com/texuna/test/Generator.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/texuna/test/Generator.java" afterPath="$PROJECT_DIR$/src/com/texuna/test/Generator.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/texuna/test/Generator.java" afterPath="$PROJECT_DIR$/src/com/texuna/test/ReportGenerator.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,11 +28,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Generator.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Generator.java">
+      <file leaf-file-name="ReportGenerator.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/texuna/test/ReportGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="32" column="4" lean-forward="false" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
+            <state relative-caret-position="-227">
+              <caret line="103" column="108" lean-forward="false" selection-start-line="103" selection-start-column="108" selection-end-line="103" selection-end-column="108" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -101,6 +100,7 @@
         <option value="$PROJECT_DIR$/example-report.txt" />
         <option value="$PROJECT_DIR$/source-data.tsv" />
         <option value="$PROJECT_DIR$/src/com/texuna/test/Generator.java" />
+        <option value="$PROJECT_DIR$/src/com/texuna/test/ReportGenerator.java" />
       </list>
     </option>
   </component>
@@ -593,12 +593,12 @@
       <workItem from="1495567154640" duration="9159000" />
       <workItem from="1495621031689" duration="34796000" />
       <workItem from="1495664379798" duration="181000" />
-      <workItem from="1495702869211" duration="23353000" />
+      <workItem from="1495702869211" duration="25659000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67489000" />
+    <option name="totallyTimeSpent" value="69795000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -658,7 +658,7 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Generator.java">
+    <entry file="file://$PROJECT_DIR$/src/com/texuna/test/ReportGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -684,7 +684,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Generator.java">
+    <entry file="file://$PROJECT_DIR$/src/com/texuna/test/ReportGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -710,7 +710,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Generator.java">
+    <entry file="file://$PROJECT_DIR$/src/com/texuna/test/ReportGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -754,10 +754,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Generator.java">
+    <entry file="file://$PROJECT_DIR$/src/com/texuna/test/ReportGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="32" column="4" lean-forward="false" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
+        <state relative-caret-position="-227">
+          <caret line="103" column="108" lean-forward="false" selection-start-line="103" selection-start-column="108" selection-end-line="103" selection-end-column="108" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
