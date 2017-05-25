@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="59d9cea3-3ba2-4990-ae1e-0da13863269b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/com/texuna/test/Settings.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/com/texuna/test/Generator.class" afterPath="$PROJECT_DIR$/bin/com/texuna/test/Generator.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/example-report.txt" afterPath="$PROJECT_DIR$/example-report.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/texuna/test/Generator.java" afterPath="$PROJECT_DIR$/src/com/texuna/test/Generator.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -34,8 +32,8 @@
       <file leaf-file-name="Generator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Generator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3417">
-              <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state relative-caret-position="257">
+              <caret line="32" column="4" lean-forward="false" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -46,8 +44,8 @@
       <file leaf-file-name="source-data.tsv" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/source-data.tsv">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+            <state relative-caret-position="88">
+              <caret line="4" column="46" lean-forward="false" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -57,7 +55,7 @@
         <entry file="file://$PROJECT_DIR$/example-report.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="154">
-              <caret line="7" column="31" lean-forward="true" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
+              <caret line="7" column="32" lean-forward="true" selection-start-line="7" selection-start-column="32" selection-end-line="7" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -100,9 +98,9 @@
       <list>
         <option value="$PROJECT_DIR$/src/com/texuna/test/Main.java" />
         <option value="$PROJECT_DIR$/src/com/texuna/test/Settings.java" />
+        <option value="$PROJECT_DIR$/example-report.txt" />
         <option value="$PROJECT_DIR$/source-data.tsv" />
         <option value="$PROJECT_DIR$/src/com/texuna/test/Generator.java" />
-        <option value="$PROJECT_DIR$/example-report.txt" />
       </list>
     </option>
   </component>
@@ -595,12 +593,12 @@
       <workItem from="1495567154640" duration="9159000" />
       <workItem from="1495621031689" duration="34796000" />
       <workItem from="1495664379798" duration="181000" />
-      <workItem from="1495702869211" duration="16856000" />
+      <workItem from="1495702869211" duration="23353000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="60992000" />
+    <option name="totallyTimeSpent" value="67489000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -732,14 +730,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Settings.java" />
-    <entry file="file://$PROJECT_DIR$/source-data.tsv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/settings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -748,18 +738,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/source-data.tsv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="46" lean-forward="false" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/example-report.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
-          <caret line="7" column="31" lean-forward="true" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
+          <caret line="7" column="32" lean-forward="true" selection-start-line="7" selection-start-column="32" selection-end-line="7" selection-end-column="32" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Generator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3417">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        <state relative-caret-position="257">
+          <caret line="32" column="4" lean-forward="false" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="4" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

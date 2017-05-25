@@ -28,7 +28,9 @@ public class Generator {
     static String columnSeparator = "|";
     static String lineSeparator = "-";
     static int lineCounter = 0;
+    static int currentReportLineHeight = 0;
 
+    
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
         String settingsFileName = args[0];
         String srcDataFileName = args[1];
@@ -54,19 +56,13 @@ public class Generator {
             columnWidths.add(i, Integer.parseInt(columnWidthNodes.item(i).getTextContent()));
         }
 
-
-        // получаем строки из исходного файла и печатаем отчет
+        //считывание данных и печать отчета
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(reportFileName), "UTF-16"));
         BufferedReader br = new BufferedReader(new InputStreamReader(
                 new FileInputStream(srcDataFileName), "UTF-16"));
 
-        String srcLine;
-        while ((srcLine = br.readLine()) != null) {
-            String[] srcLineArr = srcLine.split("\\t");
-            ArrayList<String> srcLineList = new ArrayList<>(Arrays.asList(srcLineArr));
-            bw.write(getReport(srcLineList));
-        }
+        writeReport(br, bw);
 
         br.close();
         bw.close();
@@ -74,64 +70,86 @@ public class Generator {
 
 
     /**
-     * метод получает список данных из одной строки исходного файла и возвращает отчет для вывода
-     * с заголовком и разделителями
+     * считывает построчно исходные данные и выводит отчет
      *
-     * @param srcStringParts - список данных из одной строки исходного файла
-     * @return String - текст отчета
+     * @param br - buffered reader поток для чтения данных
+     * @param bw - bufferer writer поток для записи отчета
+     * @throws IOException
      */
-    static String getReport(ArrayList<String> srcStringParts) {
-        String report = "";
-        int reportLineHeight = 0;
+    static void writeReport(BufferedReader br, BufferedWriter bw) throws IOException {
+        String srcLine;
+        while ((srcLine = br.readLine()) != null) {
+            String[] srcLineArr = srcLine.split("\\t");
+            ArrayList<String> srcLineList = new ArrayList<>(Arrays.asList(srcLineArr));
 
-        // если это первая строка на странице, то добавляем в начало отчета заголовок рекурсивным вызовом этого метода
-        if (lineCounter == 0 && !srcStringParts.get(0).equals(columnTitles.get(0))) {
-            report += getReport(columnTitles);
+            // если это первая строка на странице, то добавляем в начало отчета заголовок
+            if (lineCounter == 0) {
+                bw.write(getReportLine(columnTitles));
+                lineCounter += currentReportLineHeight;
+            }
+
+            String reportLine = getReportLine(srcLineList);
+
+            // если отчет не уместится на странице после добавления текущих данных, то переносим данные на новую страницу
+            if (lineCounter + currentReportLineHeight >= pageHeight) {
+                bw.write(pageSeparator + "\r\n");
+                lineCounter = 0;
+                // на новой странице добавляем заголовок
+                bw.write(getReportLine(columnTitles));
+                lineCounter += currentReportLineHeight;
+            }
+
+            //если это не первая строка данных на странице, то печатаем разделитель строк данных перед данными
+            if (lineCounter != 0) {
+                String lineSeparatorString = getCompletedString("", pageWidth, lineSeparator);
+                bw.write(lineSeparatorString.concat("\r\n"));
+                lineCounter++;
+            }
+
+            bw.write(reportLine);
+            lineCounter += currentReportLineHeight;
         }
+    }
+
+    /**
+     * метод получает список исходных данных для одной строки отчета и возвращает строку отчета.
+     * записывает высоту строки в статичную переменную currentReportLineHeight
+     *
+     * @param srcStringData - список данных для вывода одной строки отчета
+     * @return String - строка отчета
+     */
+    static String getReportLine(ArrayList<String> srcStringData) {
+        String report = "";
+        currentReportLineHeight = 0;
 
         // содержимое каждой ячейки разбиваем на список строк, создаем список ячеек из списков строк каждой ячейки
         ArrayList<ArrayList<String>> cellLinesList = new ArrayList<>();
 
-        for (int i = 0; i < srcStringParts.size(); i++) {
-            cellLinesList.add(splitString(srcStringParts.get(i), columnWidths.get(i)));
-            if (reportLineHeight <= cellLinesList.get(i).size()) {
+        for (int i = 0; i < srcStringData.size(); i++) {
+            cellLinesList.add(splitString(srcStringData.get(i), columnWidths.get(i)));
+            if (currentReportLineHeight <= cellLinesList.get(i).size()) {
                 // получаем высоту строки отчета по высоте самой большой ячейки в строке
-                reportLineHeight = cellLinesList.get(i).size();
+                currentReportLineHeight = cellLinesList.get(i).size();
             }
         }
 
-        // если отчет не уместится на странице после добавления текущих данных, то переносим данные на новую страницу
-        if (lineCounter + reportLineHeight >= pageHeight) {
-            report += pageSeparator + "\r\n";
-            lineCounter = 0;
-            // на новой странице добавляем заголовок
-            report += getReport(columnTitles);
-        }
-
-        //если это не первая строка данных на странице, то печатаем разделитель строк данных перед данными
-        if (lineCounter != 0) {
-            String lineSeparatorString = getCompletedString("",pageWidth,lineSeparator);
-            report = report.concat(lineSeparatorString).concat("\r\n");
-            lineCounter++;
-        }
-
         // составляем строку данных
-        for (int i = 0; i < reportLineHeight; i++) {
+        for (int i = 0; i < currentReportLineHeight; i++) {
             report = report.concat(columnSeparator);
             // в первую строку добавляем первые элементы из каждого списка строк ячеек и тд
             for (int j = 0; j < cellLinesList.size(); j++) {
                 report = report.concat(" ");
-                // печатаем данные в строку ячейки, оставшееся место заполняем пробелами
+                // пишем данные в строку ячейки, оставшееся место заполняем пробелами
                 if (cellLinesList.get(j).size() > i) {
-                    String cellLine = getCompletedString(cellLinesList.get(j).get(i), columnWidths.get(j)," ");
+                    String cellLine = getCompletedString(cellLinesList.get(j).get(i), columnWidths.get(j), " ");
                     report = report.concat(cellLine);
                 } else {// если для текущей строки ячейки нет данных, заполняем пробелами всю строку ячейки
-                    report = report.concat(getCompletedString("", columnWidths.get(j)," "));
+                    report = report.concat(getCompletedString("", columnWidths.get(j), " "));
                 }
                 report = report.concat(" ").concat(columnSeparator);
             }
             report = report.concat("\r\n");
-            lineCounter++;
+
         }
         return report;
     }
@@ -139,9 +157,9 @@ public class Generator {
     /**
      * дополняет строку нужным символом до необходимой длины
      *
-     * @param srcString - исходная строка
+     * @param srcString    - исходная строка
      * @param stringLength - необходимая длина строки
-     * @param symbol - символ для дополнения строки
+     * @param symbol       - символ для дополнения строки
      * @return String - дополненная строка
      */
     static String getCompletedString(String srcString, int stringLength, String symbol) {
