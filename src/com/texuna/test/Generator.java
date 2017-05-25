@@ -18,7 +18,7 @@ import java.util.Arrays;
  * 2 аргумент - файл, содержащий исходные данные, разделенные табуляцией в кодировке UTF-16 (.tsv);
  * 3 аргумент - файл для вывода отчета (.txt)
  */
-public class ReportGenerator {
+public class Generator {
 
     static int pageHeight;
     static int pageWidth;
