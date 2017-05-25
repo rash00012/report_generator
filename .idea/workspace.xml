@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="59d9cea3-3ba2-4990-ae1e-0da13863269b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/com/texuna/test/Generator.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.settings/org.eclipse.core.resources.prefs" afterPath="$PROJECT_DIR$/.settings/org.eclipse.core.resources.prefs" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/com/texuna/test/ReportGenerator.java" afterPath="$PROJECT_DIR$/src/com/texuna/test/Generator.java" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,7 +30,7 @@
       <file leaf-file-name="Generator.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Generator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
+            <state relative-caret-position="528">
               <caret line="24" column="60" lean-forward="false" selection-start-line="24" selection-start-column="60" selection-end-line="24" selection-end-column="60" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -595,12 +592,12 @@
       <workItem from="1495567154640" duration="9159000" />
       <workItem from="1495621031689" duration="34796000" />
       <workItem from="1495664379798" duration="181000" />
-      <workItem from="1495702869211" duration="25967000" />
+      <workItem from="1495702869211" duration="26106000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="70103000" />
+    <option name="totallyTimeSpent" value="70242000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -757,7 +754,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/texuna/test/Generator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
+        <state relative-caret-position="528">
           <caret line="24" column="60" lean-forward="false" selection-start-line="24" selection-start-column="60" selection-end-line="24" selection-end-column="60" />
           <folding>
             <element signature="imports" expanded="true" />
